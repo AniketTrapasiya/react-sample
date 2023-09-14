@@ -18,7 +18,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div className="k-line-chart-container">
       <div className="header">
         <div>
-          Stock
+          Stock : 
           <select
             name="title"
             onChange={(e) => {
@@ -28,10 +28,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             {data.map((item: any) => (
               <option value={item.name}>{item.name}</option>
             ))}
-          </select>
+          </select> 
         </div>
         <div>
-          Interval  
+          Interval :   
           <select>
             <option>1m</option>
             <option>5m</option>
@@ -39,7 +39,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </select>
         </div>
         <div>
-          Days
+          Days : 
           <select>
             <option>1 day</option>  
             <option>3 day</option>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { init, dispose, registerIndicator, Chart } from 'klinecharts'
+import { init, dispose, Chart, registerIndicator,TooltipShowRule, TooltipShowType, CandleTooltipCustomCallbackData } from 'klinecharts'
+
 import generatedDataList from '../generatedDataList'
 import Layout from '../Layout'
 
@@ -46,11 +47,34 @@ registerIndicator<EmojiEntity>({
   }
 })
 
-// const subIndicators = ['VOL']
-const themes = [
-  { key: 'dark', text: '深色' },
-  { key: 'light', text: '浅色' }
-]
+function getTooltipOptions () {
+  return {
+    candle: {
+      tooltip: {
+        showType: 'rect',
+        custom: (data: CandleTooltipCustomCallbackData) => {
+          const { prev, current } = data
+          const prevClose = (prev?.close ?? current.open)
+          const change = (current.close - prevClose) / prevClose * 100
+          return [
+            { title: 'open', value: current.open.toFixed(2) },
+            { title: 'high', value: current.high.toFixed(2) },
+            { title: 'low', value: current.low.toFixed(2) },
+            { title: 'close', value: current.close.toFixed(2) },
+            { title: 'volume', value: current.volume?.toFixed(2) },
+            {
+              title: 'Change: ',
+              value: {
+                text: `${change.toFixed(2)}%`,
+                color: change < 0 ? '#EF5350' : '#26A69A'
+              }
+            }
+          ]
+        }
+      }
+    },
+  }
+}
 export default function Indicator () {
   const chart = useRef<Chart | null>()
   const paneId = useRef<string>('')
@@ -63,6 +87,9 @@ export default function Indicator () {
     return () => {
       dispose('indicator-k-line')
     }
+  }, [])
+  useEffect(() => {
+    chart.current?.setStyles(getTooltipOptions() as any)
   }, [])
   useEffect(() => {
     chart.current?.setStyles(theme)
