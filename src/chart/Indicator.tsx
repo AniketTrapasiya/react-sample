@@ -1,53 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { init, dispose, Chart, registerIndicator,TooltipShowRule, TooltipShowType, CandleTooltipCustomCallbackData } from 'klinecharts'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { init, dispose, Chart, registerIndicator, CandleType, CandleTooltipCustomCallbackData } from 'klinecharts'
 
 import generatedDataList from '../generatedDataList'
 import Layout from '../Layout'
 
-const fruits = [
-  '🍏', '🍎', '🍐', '🍊', '🍋', '🍌',
-  '🍉', '🍇', '🍓', '🍈', '🍒', '🍑',
-  '🍍', '🥥', '🥝', '🥭', '🥑', '🍏'
-]
+const data: any = [ { timestamp: 1631584800000, open: 150, high: 160, low: 145, close: 155, volume: 100 },
+{ timestamp: 1631588400000, open: 155, high: 165, low: 150, close: 160, volume: 130 },
+{ timestamp: 1631592000000, open: 160, high: 170, low: 155, close: 165, volume: 222 },
+{ timestamp: 1631595600000, open: 165, high: 175, low: 160, close: 170, volume: 235 },
+{ timestamp: 1631599200000, open: 170, high: 180, low: 165, close: 175, volume: 392 },
+{ timestamp: 1631602800000, open: 125, high: 125, low: 110, close: 110, volume: 100 } ]
 
-interface EmojiEntity {
-  emoji: number
-  text: string
-}
-
-// 自定义指标
-registerIndicator<EmojiEntity>({
-  name: 'EMOJI',
-  figures: [
-    { key: 'emoji' }
-  ],
-  calc: (kLineDataList) => {
-    return kLineDataList.map(kLineData => ({ emoji: kLineData.close, text: fruits[Math.floor(Math.random() * 17)] }))
-  },
-  draw: ({
-    ctx,
-    barSpace,
-    visibleRange,
-    indicator,
-    xAxis,
-    yAxis
-  }) => {
-    const { from, to } = visibleRange
-
-    ctx.font = `${barSpace.gapBar}px Helvetica Neue`
-    ctx.textAlign = 'center'
-    const result = indicator.result
-    for (let i = from; i < to; i++) {
-      const data = result[i]
-      const x = xAxis.convertToPixel(i)
-      const y = yAxis.convertToPixel(data.emoji)
-      ctx.fillText(data.text, x, y)
-    }
-    return false
-  }
-})
-
-function getTooltipOptions () {
+function getTooltipOptions() {
   return {
     candle: {
       tooltip: {
@@ -72,19 +36,22 @@ function getTooltipOptions () {
           ]
         }
       }
-    },
+    }
   }
 }
-export default function Indicator () {
+
+export default function Indicator() {
   const chart = useRef<Chart | null>()
   const paneId = useRef<string>('')
-  const [theme, setTheme] = useState('dark')
-
+  const [ theme, setTheme ] = useState('dark')
+    
   useEffect(() => {
-    chart.current = init('indicator-k-line')
-    paneId.current = chart.current?.createIndicator('VOL', true) as string
-    chart.current?.applyNewData(generatedDataList())
-    return () => {
+
+    chart.current = init('indicator-k-line');
+
+    paneId.current = chart.current?.createIndicator('VOL', false) as string;
+
+    chart.current?.applyNewData(generatedDataList());    return () => {
       dispose('indicator-k-line')
     }
   }, [])
@@ -93,26 +60,12 @@ export default function Indicator () {
   }, [])
   useEffect(() => {
     chart.current?.setStyles(theme)
-  }, [theme])
+  }, [ theme ])
+
   return (
-    <Layout>
-      <div style={theme === 'dark' ? { backgroundColor: '#1f2126' } : {}} id="indicator-k-line" className="k-line-chart"/>
-      {/* <div
-        className="k-line-chart-menu-container">
-        {
-          subIndicators.map(type => {
-            return (
-              <button
-                key={type}
-                onClick={_ => {
-                  chart.current?.createIndicator(type, false, { id: paneId.current })
-                }}>
-                {type}
-              </button>
-            )
-          })
-        }
-      </div> */}
-    </Layout>
+    <>
+      <Layout>
+        <div style={theme === 'dark' ? { backgroundColor: '#1f2126' } : {}} id="indicator-k-line" className="k-line-chart" />
+      </Layout></>
   )
 }

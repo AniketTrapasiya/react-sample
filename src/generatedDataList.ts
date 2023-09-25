@@ -1,7 +1,8 @@
 import { KLineData } from "klinecharts"
 
-function generatedDataList (baseTimestamp?: number, basePrice?: number, dataSize?: number) {
 
+function generatedDataList (baseTimestamp?: number, basePrice?: number, dataSize?: number) {
+  
   const dataList: KLineData[] = []
   let timestamp = Math.floor((baseTimestamp ?? Date.now()) / 60 / 1000) * 60 * 1000
   let baseValue = basePrice ?? 5000
@@ -31,6 +32,7 @@ function generatedDataList (baseTimestamp?: number, basePrice?: number, dataSize
     kLineData.turnover = (kLineData.open + kLineData.close + kLineData.high + kLineData.low) / 4 * volume
     dataList.unshift(kLineData)
   }
+  console.log(dataList);
   return dataList
 }
 

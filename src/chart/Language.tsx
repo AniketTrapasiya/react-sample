@@ -9,7 +9,8 @@ registerLocale('zh-HK', {
   high: '高：',
   low: '低：',
   close: '收：',
-  volume: '成交量：'
+  volume: '成交量：',
+  change: ''
 })
 
 const locals = [
