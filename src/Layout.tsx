@@ -17,8 +17,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="k-line-chart-container">
       <div className="header">
-        <h3 style={{color: 'white'}}>{title}</h3>
-        {/* <div>
+        <div>
           Stock : $
           <select
             name="title"
@@ -39,8 +38,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <option>5m</option>
             <option>15m</option>
           </select>
-        </div> */}
-        {/* <div>
+        </div>
+        <div>
           Days : 
           <select>
             <option>1 day</option>  
@@ -49,7 +48,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </select>
         </div>
         <button type="button">start</button>
-        <button type="button">stop</button> */}
+        <button type="button">stop</button>
       </div>
       {children}
     </div>
