@@ -176,7 +176,7 @@ async function pattern(req, res) {
                 );
 
                 await value.reverse()
-                return res.json({ data: value, doubleBottom: data.DoubleBottom, doubleTop: data.DoubleTop, doubleBottom_Accuracy: data.DoubleBottom_Accuracy, doubleTop_Accuracy: data.DoubleTop_Accuracy });
+                return res.json({ data: value, doubleBottom: data.DoubleBottom, doubleTop: data.DoubleTop, doubleBottom_Accuracy: data.DoubleBottom_Accuracy, doubleTop_Accuracy: data.DoubleTop_Accuracy, HeadAndShoulders_Accuracy: HeadAndShoulders_Accuracy, HeadAndShoulders: HeadAndShoulders });
             }
             return res.json([[]])
         } else {
